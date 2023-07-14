@@ -1,15 +1,9 @@
-FROM rockylinux:9
+FROM debian:12
 
-# Create a non-priveleged user to run the task.
-RUN groupadd -g 1000 cicd
-RUN adduser -g 1000 -u 1000 cicd
-USER cicd
+RUN apt-get update && apt-get install -y curl
 
 # Install grype.
-USER root
 RUN curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
-USER cicd
-
 # Cache the vulnerability database in the Docker container.
 RUN grype db update
 # Don't check for database updates.
@@ -18,9 +12,9 @@ ENV GRYPE_DB_AUTO_UPDATE=false
 ENV GRYPE_DB_MAX_ALLOWED_BUILT_AGE=4320h
 
 # Install Trivy.
-USER root
-RUN rpm -ivh https://github.com/aquasecurity/trivy/releases/download/v0.42.1/trivy_0.42.1_Linux-64bit.rpm
-USER cicd
+RUN curl -L -o trivy.deb https://github.com/aquasecurity/trivy/releases/download/v0.42.1/trivy_0.42.1_Linux-64bit.deb \
+  && dpkg -i trivy.deb \
+  && rm trivy.deb
 
 # Setup Github Action.
 COPY entrypoint.sh /entrypoint.sh
