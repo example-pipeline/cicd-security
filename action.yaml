@@ -5,4 +5,4 @@ outputs:
     description: 'Output from grype in SARIF format'
 runs:
   using: 'docker'
-  image: 'Dockerfile'
+  image: 'docker://ghcr.io/example-pipeline/cicd-security:main'
