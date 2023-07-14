@@ -1,0 +1,8 @@
+name: 'cicd-security'
+description: 'Run standard security tooling on the project'
+outputs:
+  grype_sarif:
+    description: 'Output from grype in SARIF format'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
