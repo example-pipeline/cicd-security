@@ -20,8 +20,6 @@ RUN curl -L -o trivy.deb https://github.com/aquasecurity/trivy/releases/download
 RUN mkdir /trivy_temp_dir
 ENV TRIVY_TEMP_DIR=/trivy_temp_dir
 RUN trivy --cache-dir $TRIVY_TEMP_DIR image --download-db-only
-# --cache-dir option not recognised by Docker, default is /root/.cache
-#RUN trivy image --download-db-only
 RUN tar -cf ./db.tar.gz -C $TRIVY_TEMP_DIR/db metadata.json trivy.db
 RUN rm -rf $TRIVY_TEMP_DIR
 
