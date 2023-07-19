@@ -16,6 +16,27 @@ RUN curl -L -o trivy.deb https://github.com/aquasecurity/trivy/releases/download
   && dpkg -i trivy.deb \
   && rm trivy.deb
 
+# Download the vulnerability database
+RUN mkdir /trivy_temp_dir
+ENV TRIVY_TEMP_DIR=/trivy_temp_dir
+RUN trivy --cache-dir $TRIVY_TEMP_DIR image --download-db-only
+# --cache-dir option not recognised by Docker, default is /root/.cache
+#RUN trivy image --download-db-only
+RUN tar -cf ./db.tar.gz -C $TRIVY_TEMP_DIR/db metadata.json trivy.db
+RUN rm -rf $TRIVY_TEMP_DIR
+
+# # Download the Java database (** only needed to scan jar files **)
+# # RUN TRIVY_TEMP_DIR=$(mktemp -d)
+# # RUN trivy --cache-dir $TRIVY_TEMP_DIR image --download-java-db-only
+# # RUN tar -cf ./javadb.tar.gz -C $TRIVY_TEMP_DIR/java-db metadata.json trivy-java.db
+# # RUN rm -rf $TRIVY_TEMP_DIR
+
+# Put the DB files in Trivy's cache directory
+RUN mkdir -p /root/.cache/trivy/db
+RUN cd /root/.cache/trivy/db
+RUN tar xvf /db.tar.gz -C /root/.cache/trivy/db
+RUN rm /db.tar.gz
+
 # Setup Github Action.
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
