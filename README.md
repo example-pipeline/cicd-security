@@ -10,9 +10,9 @@ podman run --env-file ./podmanenvs -v `pwd`:/app:Z -it --rm localhost/cicd-secur
 \
 The file listing the environment variables requires the following:\
 \
-GITHUB_WORKSPACE=<path to the folder to be processed (the folder mapped into the image)>\
-GITHUB_TOKEN=<your GitHub Token, with permissions to scan the repo>\
-GITHUB_REPO_URL=<the URL of the GitHub Repo to scan>\
+GITHUB_WORKSPACE=< path to the folder to be processed (the folder mapped into the image) >\
+GITHUB_TOKEN=< your GitHub Token, with permissions to scan the repo >\
+GITHUB_REPO_URL=< the URL of the GitHub Repo to scan >\
 \
 
 ## Tasks
