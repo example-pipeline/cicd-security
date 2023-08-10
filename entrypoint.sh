@@ -15,7 +15,6 @@ echo "Running trivy SBOM scan"
 trivy sbom --offline-scan --skip-db-update --skip-java-db-update --output trivyfilesystemsbom.sarif trivyfilesystem.cyclonedx
 
 echo "Running trivy repo scan for " $GITHUB_REPO_URL
-trivy repo --offline-scan --skip-db-update --skip-java-db-update $GITHUB_REPO_URL
-
+trivy repo --offline-scan --skip-db-update --skip-java-db-update --format sarif --output trivyreposcan.sarif $GITHUB_REPO_URL
 
 echo "exiting ..."
